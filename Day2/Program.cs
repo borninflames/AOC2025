@@ -11,7 +11,7 @@ foreach (var range in ranges)
 {
     for (long id = range[0]; id <= range[1]; id++)
     {
-        if (IsInvalid(id.ToString()))
+        if (IsInvalidPart2(id.ToString()))
         {
              invalidIdSum += id;
         }
@@ -20,7 +20,25 @@ foreach (var range in ranges)
 
 Console.WriteLine($"Day 2 answer = {invalidIdSum}");
 
-bool IsInvalid(string id)
+bool IsInvalidPart2(string id)
+{
+    for (int chunkSize = 1; chunkSize < id.Length; chunkSize++)
+    {
+        if (id.Length % chunkSize == 0)
+        {
+            var chunks = id.Chunk(chunkSize);
+            var pattern = new string(chunks.First());
+            if (chunks.All(chunk => new string(chunk) == pattern)) 
+            {
+                return true;
+            }
+        }   
+    }
+
+    return false;
+}
+
+bool IsInvalidPart1(string id)
 {
     if (id.Length % 2 != 0) return false;
     var middleLength = id.Length / 2;
