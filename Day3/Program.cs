@@ -2,32 +2,28 @@
 Console.WriteLine();
 
 string filePath = "input.txt";
-var answer = 0;
+var answer = 0L;
 
 foreach (string line in File.ReadLines(filePath))
 {
     Console.WriteLine(line);
 
     var maxPos = 0;
-    var dec1 = '0';
-    for (int i = 0; i < line.Length-1; i++)
+    var maxNum = new char[12];
+
+    for (int d = 11; d >= 0; d--)
     {
-        if (line[i] > dec1)
+        for (int i = maxPos; i < line.Length - d; i++)
         {
-            dec1 = line[i];
-            maxPos = i;
-        }
-    }
-    var dec2 = '0';
-    for (int i = maxPos+1; i < line.Length; i++)
-    {
-        if (line[i] > dec2)
-        {
-            dec2 = line[i];
+            if (line[i] > maxNum[d])
+            {
+                maxNum[d] = line[i];
+                maxPos = i + 1;
+            }
         }
     }
 
-    var result = int.Parse($"{dec1}{dec2}");
+    var result = long.Parse(new string([.. maxNum.Reverse()]));
     answer += result;
 }
 
