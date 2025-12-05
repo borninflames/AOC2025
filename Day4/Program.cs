@@ -8,7 +8,7 @@ var boundaryRow = new string('.', rollOfPapers.First().Length);
 rollOfPapers = [.. rollOfPapers.Prepend(boundaryRow)];
 rollOfPapers = [.. rollOfPapers.Append(boundaryRow)];
 
-rollOfPapers = rollOfPapers.Select(line => $".{line}.").ToArray();
+rollOfPapers = [.. rollOfPapers.Select(line => $".{line}.")];
 
 for (int row = 1; row < rollOfPapers.Length - 1; row++)
 {
@@ -29,7 +29,5 @@ for (int row = 1; row < rollOfPapers.Length - 1; row++)
     }
     Console.WriteLine();
 }
-
-
 
 Console.WriteLine($"Day 4 answer: {answer}");
