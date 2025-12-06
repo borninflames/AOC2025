@@ -64,7 +64,8 @@ static List<(long, long)> MergeRanges(List<(long, long)> ranges)
                 break;
             }
 
-            currentRange = (Math.Min(currentRange.Item1, overlappingRange.Item1), Math.Max(currentRange.Item2, overlappingRange.Item2));
+            currentRange = (Math.Min(currentRange.Item1, overlappingRange.Item1), 
+                Math.Max(currentRange.Item2, overlappingRange.Item2));
             ranges.Remove(overlappingRange);
         }
 
