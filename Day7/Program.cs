@@ -1,37 +1,41 @@
 ﻿Console.WriteLine("Day 7");
 Console.WriteLine();
-
 string filePath = "input.txt";
 using StreamReader sr = new(filePath);
 string? line = await sr.ReadLineAsync();
 int splitCount = 0;
-List<int> beamCols = [
-    line!.IndexOf('S')
-];
-
-Console.WriteLine(line);
-
+Dictionary<int, long> beams = [];
+beams.Add(line!.IndexOf('S'), 1);
 while ((line = await sr.ReadLineAsync()) != null)
 {
-    List<int> newBeamCols = [.. beamCols];
-    for (int i = 0; i < beamCols.Count; i++)
+    Dictionary<int, long> newBeams = [];
+    foreach (var (pos, count) in beams)
     {
-        if (line[beamCols[i]] == '^')
+        if (line[pos] == '^')
         {
             splitCount++;
-            newBeamCols.Remove(beamCols[i]);
-            if (!newBeamCols.Contains(beamCols[i] - 1))
+            if (!newBeams.ContainsKey(pos - 1))
             {
-                newBeamCols.Add(beamCols[i] - 1);
+                newBeams.Add(pos - 1, 0);
             }
-            if (!newBeamCols.Contains(beamCols[i] + 1))
+            if (!newBeams.ContainsKey(pos + 1))
             {
-                newBeamCols.Add(beamCols[i] + 1);
-            }            
+                newBeams.Add(pos + 1, 0);
+            }
+            newBeams[pos - 1] += count;
+            newBeams[pos + 1] += count;
+        }
+        else 
+        {
+            if (!newBeams.ContainsKey(pos))
+            {
+                newBeams.Add(pos, 0);
+            }
+            newBeams[pos] += count;
         }
     }
-
-    beamCols = newBeamCols;
+    beams = newBeams;
 }
 
-Console.WriteLine($"Day 7 answer: {splitCount}");
+Console.WriteLine($"Day 7 part 1 answer: {splitCount}");
+Console.WriteLine($"Day 7 part 2 answer: {beams.Values.Sum()}");
