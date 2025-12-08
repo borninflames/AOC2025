@@ -22,9 +22,11 @@ for (int i = 0; i < jBoxes.Count - 1; i++)
 
 distances = [.. distances.OrderBy(d => d.Distance)];
 
-for (int i = 0; i < 1000; i++)
+
+var isAnswerFound = false;
+for (int i = 0; i < distances.Count && !isAnswerFound; i++)
 {
-    Console.WriteLine($"Distance {distances[i].Distance:0.##} between {distances[i].A} and {distances[i].B}");
+    Console.WriteLine($"Distance {distances[i].Distance:0.00} between {distances[i].A} and {distances[i].B}");
 
     var d = distances[i];
     var foundCircuits = circuits.Where(c => c.Contains(d.A) || c.Contains(d.B)).ToList();
@@ -37,10 +39,16 @@ for (int i = 0; i < 1000; i++)
                 circuit.Add(d.A);
             if (!circuit.Contains(d.B))
                 circuit.Add(d.B);
+
+            if (circuit.Count == jBoxes.Count)
+            {
+                isAnswerFound = true;
+                Console.WriteLine($"Merged into one circuit... Answer part 2 is: {d.A.X * d.B.X}");
+            }
         }
         else if (foundCircuits.Count == 2)
         {
-            foundCircuits[0].AddRange(foundCircuits[1]);
+            foundCircuits[0].AddRange(foundCircuits[1]);            
             circuits.Remove(foundCircuits[1]);
         }        
     }
@@ -49,18 +57,6 @@ for (int i = 0; i < 1000; i++)
         circuits.Add([d.A, d.B]);
     }
 }
-
-var circuitSizes = circuits.OrderByDescending(c => c.Count).Select(c => c.Count).Take(3).ToList();
-
-var answer = 1;
-foreach (var size in circuitSizes)
-{    
-    answer *= size;
-}
-
-
-Console.WriteLine($"Day 8 part 1 answer: {answer}");
-//Console.WriteLine($"Day 8 part 2 answer: {beams.Values.Sum()}");
 
 static double GetDistance(JBox a, JBox b)
 {
